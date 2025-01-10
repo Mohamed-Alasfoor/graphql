@@ -10,7 +10,7 @@ function PassFailChart({ passCount, failCount }) {
   const COLORS = ['#34d399', '#f87171'];
 
   return (
-    <PieChart width={500} height={400}>
+    <PieChart  width={500} height={400}>
       <Pie
         data={data}
         cx="50%"

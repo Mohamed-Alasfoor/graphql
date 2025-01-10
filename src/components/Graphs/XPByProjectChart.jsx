@@ -9,7 +9,7 @@ function XPByProjectChart({ projects }) {
 
   return (
     <BarChart
-      width={800}
+      width={700}
       height={500}
       data={chartData}
       margin={{ top: 20, right: 30, left: 20, bottom: 85 }}
@@ -23,7 +23,7 @@ function XPByProjectChart({ projects }) {
         textAnchor="end"
       />
       <YAxis
-        domain={[0, 300]}
+        domain={[0, 200]}
         label={{
           value: 'XP in KB',
           angle: -90,
