@@ -1,0 +1,34 @@
+/* Use Tailwind's utility classes for most styling needs. */
+/* This file can be used for global overrides or additional custom styles. */
+
+body {
+  @apply bg-gray-50 text-gray-800 font-sans;
+}
+
+.loading {
+  @apply text-center text-blue-500 font-bold text-lg;
+}
+
+.error {
+  @apply text-center text-red-500 font-semibold;
+}
+
+/* You can include additional global utility classes if needed. */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, #4caf50, #2196f3); /* Gradient color */
+  border-radius: 10px; /* Rounded scrollbar thumb */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f4f4f4; /* Track color */
+  border-radius: 10px; /* Rounded edges for the track */
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #4caf50 #f4f4f4; /* Thumb and track color for Firefox */
+}
