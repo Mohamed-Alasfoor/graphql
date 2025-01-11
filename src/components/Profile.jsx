@@ -50,9 +50,12 @@ function Profile() {
   const latestProjects = latestProjectsData?.transaction || [];
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
+    if (window.confirm("Are you sure you want to log out?")) {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
   };
+  
 
   return (
     <div className="profile-bg">

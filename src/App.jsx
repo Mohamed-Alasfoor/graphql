@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login.jsx';
 import Profile from './components/Profile.jsx';
-
+import ErrorPage from './components/ErrorPage.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 function App() {
   return (
     <BrowserRouter>
@@ -14,7 +15,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         
         {/* Profile page */}
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        {/* invalid route */}
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   );
