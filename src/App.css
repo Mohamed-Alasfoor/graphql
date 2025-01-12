@@ -47,4 +47,7 @@ body {
   background-repeat: no-repeat; /* Prevents the image from repeating */
   height: 100%; /* Sets the height to full viewport */
 }
+body{
+  background-image: url('../public/graphqlimg.jpg');;
+}
 
