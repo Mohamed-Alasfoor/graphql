@@ -22,7 +22,7 @@ function ErrorPage() {
       </h2>
       <p className="text-center mb-8 text-lg">
         {errorMessage === 'unauthorized'
-          ? 'mmmmm.. what do u think u are doing? You must log in to access this page.'
+          ? 'HeHeee boiii, You must log in to access this page.'
           : "The page you're looking for doesn't exist."}
       </p>
       <button

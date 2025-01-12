@@ -28,50 +28,62 @@ query GetTotalXPInKB($userId: Int!) {
 }
 `;
 
-// Argument-based Query: get progress by userId
-export const GET_DETAILED_XP = gql`
-query GetDetailedXP($userId: Int!) {
-  piscineGoXP: transaction_aggregate(
-    where: {
-      userId: { _eq: $userId },
-      type: { _eq: "xp" },
-      path: { _like: "%bh-piscine%" }
-    }
-  ) {
-    aggregate {
-      sum {
-        amount
+// Query to calculate piscineGoXP
+export const GET_PISCINE_GO_XP = gql`
+  query GetPiscineGoXP($userId: Int!) {
+    transaction(
+      where: {
+        userId: { _eq: $userId },
+        type: { _eq: "xp" },
+        path: { _like: "%bh-piscine%" }
       }
+    ) {
+      amount
     }
   }
-  piscineJsXP: transaction_aggregate(
-    where: {
-      userId: { _eq: $userId },
-      type: { _eq: "xp" },
-      path: { _like: "%piscine-js%" }
-    }
-  ) {
-    aggregate {
-      sum {
-        amount
-      }
-    }
-  }
-  projectXP: transaction_aggregate(
-    where: {
-      userId: { _eq: $userId },
-      type: { _eq: "xp" },
-      object: { type: { _eq: "project" } }
-    }
-  ) {
-    aggregate {
-      sum {
-        amount
-      }
-    }
-  }
-}
 `;
+
+
+// Query to calculate piscineJsXP
+export const GET_PISCINE_JS_XP = gql`
+  query GetPiscineJsXP($userId: Int!) {
+    transaction_aggregate(
+      where: {
+        userId: { _eq: $userId },
+        type: { _eq: "xp" },
+        event: {path: { _like: "%piscine-js%" }}
+      }
+    ) {
+      aggregate {
+        sum {
+          amount
+        }
+      }
+    }
+  }
+`;
+
+
+// Query to calculate projectXP from bhmodule
+export const GET_PROJECT_XP = gql`
+  query {
+    transaction_aggregate(
+      where: {
+        event: { path: { _eq: "/bahrain/bh-module" } }
+        type: { _eq: "xp" }
+      }
+    ) {
+      aggregate {
+        sum {
+          amount
+        }
+      }
+    }
+  }
+
+`;
+
+
 
 export const GET_PROJECTS_WITH_XP = gql`
   query GetProjectsAndXP($userId: Int!) {

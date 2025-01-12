@@ -9,8 +9,7 @@ function ProtectedRoute({ children }) {
     return (
       <Navigate
         to="/error"
-        replace
-        state={{ message: 'unauthorized' }} // Pass state for unauthorized access
+        replace state={{ message: 'unauthorized' }} // Pass state for unauthorized access
       />
     );
   }

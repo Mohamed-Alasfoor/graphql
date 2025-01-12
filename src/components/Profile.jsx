@@ -3,10 +3,9 @@ import { useQuery } from '@apollo/client';
 import {
   GET_USER_INFO,
   GEt_Total_XPInKB,
-  GET_DETAILED_XP,
   GET_PROJECTS_WITH_XP,
   GET_PROJECTS_PASS_FAIL,
-  GET_LATEST_PROJECTS_WITH_XP,
+  GET_LATEST_PROJECTS_WITH_XP,GET_PISCINE_GO_XP, GET_PISCINE_JS_XP, GET_PROJECT_XP
 } from '../graphql/queries';
 import PassFailChart from './Graphs/PassFailChart';
 import XPByProjectChart from './Graphs/XPByProjectChart';
@@ -22,30 +21,31 @@ function Profile() {
   }, [userData]);
 
   const { data: xpdata, loading: xpLoading, error: xpError } = useQuery(GEt_Total_XPInKB, { variables: { userId } });
-  const { data: detailxpData, loading: detailxpLoading, error: detailxpError } = useQuery(GET_DETAILED_XP, { variables: { userId } });
+  const { data: piscineGoXPData, loading: piscineGoXPLoading, error: piscineGoXPError } = useQuery(GET_PISCINE_GO_XP, { variables: { userId }, });
+  const { data: piscineJsXPData, loading: piscineJsXPLoading, error: piscineJsXPError } = useQuery(GET_PISCINE_JS_XP, { variables: { userId }, });
+  const { data: projectXPData, loading: projectXPLoading, error: projectXPError } = useQuery(GET_PROJECT_XP, { variables: { userId },});
   const { data: projectsData, loading: projectsLoading, error: projectsError } = useQuery(GET_PROJECTS_WITH_XP, { variables: { userId } });
   const { data: passFailData, loading: passFailLoading, error: passFailError } = useQuery(GET_PROJECTS_PASS_FAIL, { variables: { userId } });
   const { data: latestProjectsData, loading: latestProjectsLoading, error: latestProjectsError } = useQuery(GET_LATEST_PROJECTS_WITH_XP, { variables: { userId } });
 
-  if (userLoading || xpLoading || detailxpLoading || projectsLoading || passFailLoading || latestProjectsLoading) {
+  if (userLoading || xpLoading || projectsLoading || passFailLoading || latestProjectsLoading || piscineGoXPLoading || piscineJsXPLoading || projectXPLoading) {
     return <div className="text-center text-purple-500 font-bold">Loading...</div>;
   }
 
-  if (userError || xpError || detailxpError || projectsError || passFailError || latestProjectsError) {
+  if (userError || xpError || projectsError || passFailError || latestProjectsError || piscineGoXPError || piscineJsXPError || projectXPError) {
     return <div className="text-center text-red-500 font-bold">Error loading data.</div>;
   }
 
   const currentUser = userData?.user[0] || {};
-  const piscineGoXPInKB = (detailxpData?.piscineGoXP?.aggregate?.sum?.amount || 0) / 1024;
-  const piscineJsXPInKB = (detailxpData?.piscineJsXP?.aggregate?.sum?.amount || 0) / 1024;
-  const projectXPInKB = (detailxpData?.projectXP?.aggregate?.sum?.amount || 0) / 1024;
+  const piscineGoXPTotal = piscineGoXPData?.transaction.reduce((sum, tx) => sum + tx.amount, 0) / 1000 || 0;
+  const piscineJsXPTotal = (piscineJsXPData?.transaction_aggregate?.aggregate?.sum?.amount || 0)/1000;
+  const projectXPTotal = (projectXPData?.transaction_aggregate?.aggregate?.sum?.amount || 0) / 1000;
   const projects = projectsData?.transaction || [];
   const passCount = passFailData.progress.filter((item) => item.grade !== null && item.grade >= 1).length;
   const failCount = passFailData.progress.filter((item) => item.grade !== null && item.grade < 1).length;
 
   const totalXP = xpdata?.transaction_aggregate?.aggregate?.sum?.amount || 0;
-  const totalXPInKB = (totalXP / 1024).toFixed(2);
-  const otherXPInKB = totalXPInKB - (piscineGoXPInKB + piscineJsXPInKB + projectXPInKB);
+  const totalXPInKB = (totalXP / 1000).toFixed(2);
 
   const latestProjects = latestProjectsData?.transaction || [];
 
@@ -112,19 +112,15 @@ function Profile() {
                 </div>
                 <div>
                   <p className="font-semibold text-purple-600">Piscine Go XP</p>
-                  <p>{piscineGoXPInKB.toFixed(2)} KB</p>
+                  <p>{piscineGoXPTotal.toFixed(2)} KB</p>
                 </div>
                 <div>
                   <p className="font-semibold text-purple-600">Piscine JS XP</p>
-                  <p>{piscineJsXPInKB.toFixed(2)} KB</p>
+                  <p>{piscineJsXPTotal.toFixed(2)} KB</p>
                 </div>
                 <div>
                   <p className="font-semibold text-purple-600">Project XP</p>
-                  <p>{projectXPInKB.toFixed(2)} KB</p>
-                </div>
-                <div>
-                  <p className="font-semibold text-purple-600">Other XP</p>
-                  <p>{otherXPInKB.toFixed(2)} KB</p>
+                  <p>{projectXPTotal.toFixed(2)} KB</p>
                 </div>
               </div>
             </div>
@@ -148,7 +144,7 @@ function Profile() {
                       </p>
                     </div>
                     <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                      {(project.amount / 1024).toFixed(2)} KB
+                      {(project.amount / 1000).toFixed(2)} KB
                     </span>
                   </div>
                   {index < projects.length - 1 && <hr className="my-2 border-gray-200" />}
