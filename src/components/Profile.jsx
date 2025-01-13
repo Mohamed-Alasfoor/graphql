@@ -155,19 +155,21 @@ function Profile() {
         </div>
       </div>
 
-      {/* Charts Section */}
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold mb-4 text-purple-700">XP by Latest 12 Projects</h2>
-          <XPByProjectChart projects={latestProjects} />
-        </div>
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-          <h2 className="text-xl font-bold mb-4 text-purple-700">Projects PASS and FAIL Ratio</h2>
-          <div className="flex justify-center items-center">
-               <PassFailChart passCount={passCount} failCount={failCount} />
-           </div>  
-        </div>
-      </div>
+{/* Charts Section */}
+<div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div className="bg-white p-6 rounded-lg shadow-lg w-full">
+    <h2 className="text-xl font-bold mb-4 text-purple-700">XP by Latest 12 Projects</h2>
+    <div className="w-full h-[500px]">
+      <XPByProjectChart projects={latestProjects} />
+    </div>
+  </div>
+  <div className="bg-white p-6 rounded-lg shadow-lg w-full">
+    <h2 className="text-xl font-bold mb-4 text-purple-700">Projects PASS and FAIL Ratio</h2>
+    <div className="flex justify-center items-center">
+      <PassFailChart passCount={passCount} failCount={failCount} />
+    </div>
+  </div>
+</div>
     </div>
     </div>
   );
